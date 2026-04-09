@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background:
+    linear-gradient(rgba(255,255,255,0.30), rgba(255,255,255,0.30)),
+    url('background.jpg') center/cover no-repeat fixed;
+  background-blend-mode: soft-light;
+  color: #3a2f20;
+  min-height: 100vh;
+}
+.page-wrap {
+  max-width: 1000px;
+  margin: 30px auto 40px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.25);
+  backdrop-filter: blur(4px);
+}
+.logo {
+  max-height: 70px;
+  display: block;
+  margin-bottom: 10px;
+  filter: drop-shadow(1px 1px 4px rgba(0,0,0,.35));
+}
+.hero { background: linear-gradient(135deg, #d66700, #ff9f2e); border-radius: 14px; padding: 22px; color: #fff; box-shadow: 0 8px 25px rgba(0,0,0,.3); }
+.site-nav { margin-top: 12px; margin-bottom: 18px; display: flex; gap: 10px; }
+.site-nav a { text-decoration: none; color: #fff; background: rgba(0,0,0,.35); padding: 8px 12px; border-radius: 8px; font-weight: 600; transition: background .25s; }
+.site-nav a:hover { background: rgba(0,0,0,.55); }
+.hero h1 { margin: 0 0 8px; font-size: 2.1rem; text-shadow: 1px 1px 2px rgba(0,0,0,.25); }
+.hero p { margin: 5px 0; font-size: 1rem; }
+.content-cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 16px; margin: 18px 0; }
+.preview-group { display: grid; gap: 18px; margin: 18px 0; }
+.section-group { margin: 24px 0; }
+.section-title { margin: 0 0 14px; font-size: 1.5rem; color: #8b3c05; }
+.room-preview { padding: 22px; border: 2px solid #c36a0b; border-radius: 16px; background: rgba(255,255,255,.95); box-shadow: inset 0 0 0 1px rgba(195,106,11,.12); }
+.preview-card { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: center; }
+.preview-card img { width: 100%; height: 100%; min-height: 260px; object-fit: cover; border-radius: 16px; box-shadow: 0 12px 30px rgba(0,0,0,.18); }
+.preview-text h2 { margin-top: 0; margin-bottom: 10px; color: #9b3f05; }
+.room-tag { margin: 0 0 12px; font-weight: 700; color: #5d2a09; }
+.room-inclusions { padding-left: 18px; margin: 12px 0; }
+.room-inclusions li { margin-bottom: 8px; }
+.room-visit { margin: 12px 0 0; font-style: italic; color: #5e402d; }
+.preview-buttons { display: flex; gap: 10px; margin-top: 14px; }
+.prev-btn, .next-btn { border: none; border-radius: 10px; padding: 10px 14px; flex: 1; cursor: pointer; background: #d16d20; color: #fff; font-weight: 700; transition: transform .2s ease, background .2s ease; }
+.prev-btn:hover, .next-btn:hover { background: #bc5c1c; transform: translateY(-1px); }
+.room-card { border: 2px solid #c36a0b; border-radius: 16px; background: #fff6e8; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 24px rgba(0,0,0,.12); cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; }
+.room-card:hover { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(0,0,0,.18); }
+.card-image img { width: 100%; height: 190px; object-fit: cover; }
+.card-details { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.card-details h3 { margin: 0; color: #8b3c05; }
+.card-details p { margin: 0; color: #4d2f1b; }
+.faq, .reservation { margin: 18px 0; padding: 18px; border: 1px solid #b78041; border-radius: 12px; background: rgba(255,255,255,.92); }
+.faq h3, .reservation h3 { margin-top: 0; }
+@media (max-width: 780px) {
+  .preview-card { grid-template-columns: 1fr; }
+  .content-cards { grid-template-columns: 1fr; }
+}
+.chatbot { position: fixed; right: 20px; bottom: 20px; width: 320px; max-height: 420px; border-radius: 14px; box-shadow: 0 12px 30px rgba(0,0,0,.35); overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f7f5f1; z-index: 10; display: flex; flex-direction: column; }
+.chat-header { background: #93501b; color: #fff; padding: 10px; font-weight: 700; text-align: center; position: sticky; top: 0; z-index: 2; }
+.minimize-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; }
+.chat-content { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+.chat-messages { padding: 10px; flex: 1; overflow-y: auto; background: #fffdfa; min-height: 0; }
+.message { margin: 8px 0; padding: 8px 10px; border-radius: 12px; max-width: 86%; line-height: 1.35; white-space: pre-wrap; word-wrap: break-word; animation: fadeIn 0.3s ease-in; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.message.user { align-self: flex-end; background: #ffcc8f; color: #3d2216; margin-left: auto; border-bottom-right-radius: 4px; }
+.message.bot { background: #f0efe8; color: #2f2214; border-bottom-left-radius: 4px; position: relative; }
+.message.bot::before { content: '🤖'; position: absolute; left: -28px; top: 8px; font-size: 1rem; }
+.message.user::before { content: '🙂'; position: absolute; right: -28px; top: 8px; font-size: 1rem; }
+.typing-indicator { padding: 8px 10px; font-style: italic; color: #666; }
+.chat-hint { padding: 10px 14px; background: #fff4d9; border-radius: 12px; margin: 10px 16px 0; font-size: 0.95rem; color: #6b4a23; border: 1px dashed #e2b77b; }
+.chat-input-row { display: flex; border-top: 1px solid #e0ccb3; }
+#chatInput { flex: 1; border: none; padding: 10px 12px; font-size: 0.95rem; outline: none; background: #fffdfa; }
+#sendBtn { background: #d16d20; color: #fff; border: none; padding: 10px 14px; cursor: pointer; font-weight: bold; border-radius: 0 0 0 0; }
+#sendBtn:hover { background: #bc5c1c; }
+.chat-bottom { display: flex; flex-direction: column; gap: 10px; padding: 0 16px 16px; }
+.chat-suggestions { max-height: 140px; overflow-y: auto; }
+.suggestions-label { margin: 0 0 8px; font-size: 0.85rem; font-weight: 700; color: #5d2a09; }
+.suggestion-btn { display: block; width: 100%; margin-bottom: 8px; padding: 10px 12px; border: 1px solid #d66700; border-radius: 12px; background: #fff; color: #5d2a09; font-size: 0.92rem; cursor: pointer; font-weight: 600; transition: background .2s, color .2s, transform .2s; text-align: left; }
+.suggestion-btn:hover { background: #d66700; color: #fff; transform: translateY(-1px); }
+.reservation-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.action-btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 16px; background: #d16d20; color: #fff; text-decoration: none; border-radius: 12px; font-weight: 700; transition: background .2s, transform .2s; }
+.action-btn:hover { background: #bc5c1c; transform: translateY(-1px); }
+.room-card { position: relative; }
+.room-card::after { content: 'Tap to view'; position: absolute; bottom: 12px; right: 12px; background: rgba(255,255,255,.92); color: #8b3c05; padding: 4px 8px; border-radius: 10px; font-size: 0.8rem; }
+@media (max-width: 780px) {
+  .chatbot { width: calc(100vw - 28px); right: 14px; bottom: 14px; max-height: 80vh; }
+  .chat-hint { margin: 10px 12px 0; }
+}

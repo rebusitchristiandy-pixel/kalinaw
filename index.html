@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalinaw Mountain Resort Chatbot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="hero">
+      <img src="logo.jpg" alt="Kalinaw Mountain Resort logo" class="logo">
+      <h1>Kalinaw Mountain Resort</h1>
+      <p>Purok Lubi Dos, Barangay Tamiao, Bantayan, Philippines, 6052</p>
+      <p>Open 9:00AM - 6:00PM | No corkage fee | Pool access until 9PM</p>
+    </header>
+
+    <nav class="site-nav">
+      <a href="#rooms">Rooms</a>
+      <a href="#cottages">Cottages</a>
+      <a href="#faq">FAQ</a>
+      <a href="#reservation">Reservation</a>
+    </nav>
+
+    <section class="preview-group">
+      <section class="room-preview" id="roomPreview"></section>
+      
+    </section>
+
+    <section id="rooms" class="section-group">
+      <h2 class="section-title">Rooms</h2>
+      <div id="content" class="content-cards"></div>
+    </section>
+
+    <section id="cottages" class="section-group">
+      <section class="room-preview" id="cottagePreview"></section>
+      <h2 class="section-title">Cottages</h2>
+      <div id="cottagesContent" class="content-cards"></div>
+    </section>
+
+    <section id="faq" class="faq">
+      <h3>FAQ</h3>
+      <ul>
+        <li>Check-in: 12:00 PM</li>
+        <li>Check-out: 10:00 AM</li>
+        <li>Entrance fee: ₱0 for 0-2 yrs, ₱80 for 3-8 yrs, ₱150 for 9 yrs and above</li>
+        <li>Cancellation: No refund on reservation; date transfer allowed if available</li>
+        <li>Reservation requirements: valid ID, 50% deposit to hold booking</li>
+      </ul>
+    </section>
+
+    <section id="reservation" class="reservation">
+      <h3>Reservation request</h3>
+      <p>Send us a pre-booking message via chatbot: dates, room type, number of guests.</p>
+      <p>Note: entrance fee is charged per person at resort entry; children 0-2 yrs enter free.</p>
+      <p>Contact for reservation:</p>
+      <ul>
+        <li>Mobile: <a href="tel:09293878342">0929 387 8342</a></li>
+        <li>Facebook: <a href="https://www.facebook.com/kalinawmountainresort" target="_blank" rel="noreferrer">Kalinaw Mountain Resort</a></li>
+      </ul>
+      <div class="reservation-actions">
+        <a class="action-btn" href="tel:09293878342">Call now</a>
+        <a class="action-btn" href="https://www.facebook.com/kalinawmountainresort" target="_blank" rel="noreferrer">Open Facebook</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="chatbot" id="chatbot">
+    <div class="chat-header">
+      Resort Chatbot
+      <button id="minimizeBtn" class="minimize-btn">−</button>
+    </div>
+    <div class="chat-content" id="chatContent">
+      <div class="chat-messages" id="chatMessages"></div>
+      <div id="typingIndicator" class="typing-indicator" style="display: none;">Bot is typing...</div>
+      
+      <div class="chat-bottom">
+        <div class="chat-suggestions" id="chatSuggestions"></div>
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" placeholder="Ask about availability, booking, check-in/out, entrance fee...">
+          <button id="sendBtn" type="button">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script>
+    $(function () {
+      $('a[href^="#"]').on('click', function (event) {
+        event.preventDefault();
+        const target = $(this.getAttribute('href'));
+        if (target.length) {
+          $('html, body').stop().animate({
+            scrollTop: target.offset().top - 20
+          }, 600);
+        }
+      });
+    });
+  </script>
+
+  <script>
+    const resortData = {
+      name: 'Kalinaw Mountain Resort',
+      location: 'Purok Lubi Dos, Barangay Tamiao, Bantayan, Philippines, 6052',
+      checkIn: '12:00 PM',
+      checkOut: '10:00 AM',
+      cancellation: 'No refund on reservation. You may move your date once, subject to availability.',
+      rooms: [
+        {
+          name: 'A-Frame',
+          price: 3500,
+          pax: 6,
+          ac: true,
+          image: 'a-frame.jpg',
+          description: 'Air-conditioned A-Frame cottage with deck, ideal for groups of 6.',
+          inclusions: ['Breakfast for 6', 'Pool access until 9PM', 'Billiard', 'WiFi voucher']
+        },
+        {
+          name: 'Amakan Room',
+          price: 3500,
+          pax: 6,
+          ac: true,
+          image: 'amakan.jpg',
+          description: 'Comfortable Amakan Room with a warm tropical style for six guests.',
+          inclusions: ['Breakfast for 6', 'Pool access until 9PM', 'Billiard', 'WiFi voucher']
+        },
+        {
+          name: 'Bamboo A-Frame',
+          price: 600,
+          pax: 2,
+          ac: false,
+          image: 'bamboo a-frame.jpg',
+          description: 'Cozy bamboo A-Frame cabin perfect for couples or solo travelers.',
+          inclusions: ['Pool access until 9PM']
+        },
+        {
+          name: 'Standard Room',
+          price: 1700,
+          pax: 2,
+          ac: true,
+          image: 'standardroom_2pax.jpg',
+          description: 'Air-conditioned standard room for 2 guests with a comfortable bed and private bathroom.',
+          inclusions: ['Breakfast for 2', 'Pool access until 9PM', 'Billiard', 'WiFi voucher']
+        },
+        {
+          name: 'Standard Room 4 Pax',
+          price: 3000,
+          pax: 4,
+          ac: true,
+          image: 'standardroom_4pax.jpg',
+          description: 'Air-conditioned standard room for 4 guests with spacious layout and modern comforts.',
+          inclusions: ['Breakfast for 4', 'Pool access until 9PM', 'Billiard', 'WiFi voucher']
+        }
+      ],
+      cottages: [
+        {
+          name: 'Poolside & Mangga Cottage',
+          price: '₱500 (half cottage) • ₱1000 (whole cottage) • ₱400 (Mangga)',
+          pax: '25-30pax capacity (Poolside) • 25-30pax capacity (Mangga)',
+          ac: false,
+          image: 'poolside and mangga cottage.jpg',
+          description: 'Combined cottage details for both Poolside and Mangga cottage options.',
+          details: [
+            {
+              name: 'Poolside Cottage',
+              price: '₱500 (half cottage) • ₱1000 (whole cottage)',
+              pax: '(12pax capacity & 25pax capacity)',
+              note: '✓ Pool access until 9:00 PM (available as add-on)'
+            },
+            {
+              name: 'Mangga Cottage',
+              price: '₱400',
+              pax: '(25-30pax capacity)',
+              note: '✓ Pool access until 9:00 PM (available as add-on)'
+            }
+          ]
+        },
+        {
+          name: 'Cogon & Mushroom Cottage',
+          price: '₱200 (Cogon) • ₱250 (Mushroom)',
+          pax: '6pax capacity (Cogon) • 7-9pax capacity (Mushroom)',
+          ac: false,
+          image: 'cogon and mushroom cottage.jpg',
+          description: 'Combined cottage details for both Cogon and Mushroom cottage options.',
+          details: [
+            {
+              name: 'Cogon Cottage',
+              price: '₱200',
+              pax: '(6pax capacity)',
+              note: '✓ Pool access until 9:00 PM (available as add-on)'
+            },
+            {
+              name: 'Mushroom Cottage',
+              price: '₱250',
+              pax: '(7-9pax capacity)',
+              note: '✓ Pool access until 9:00 PM (available as add-on)'
+            }
+          ]
+        },
+        {
+          name: 'Cogon & Kubo Cottage',
+          price: '₱300 (Cogon) • ₱400 (Kubo)',
+          pax: '',
+          ac: false,
+          image: 'cogon and kubo cottage.jpg',
+          description: 'Combined cottage details for both Cogon and Kubo cottage options.',
+          details: [
+            {
+              name: 'Cogon Cottage',
+              price: '₱300',
+              pax: '(15-20pax capacity)',
+              note: '✓ Pool access until 9:00 PM (available as add-on)'
+            },
+            {
+              name: 'Kubo Cottage',
+              price: '₱400',
+              pax: '(15pax capacity)',
+              note: '✓ Pool access until 9:00 PM (available as add-on)'
+            }
+          ]
+        }
+      ],
+      help: 'Text any of: availability, book, cancel, check-in/out, entrance fee, contact, address, rooms, cottages, policies.',
+      contact: {
+        phone: '0929 387 8342',
+        facebookName: 'Kalinaw Mountain Resort',
+        facebookHandle: 'kalinawmountainresort',
+        facebookUrl: 'https://www.facebook.com/kalinawmountainresort'
+      },
+      entranceFees: [
+        { age: '0-2 yrs', price: '₱0' },
+        { age: '3-8 yrs', price: '₱80' },
+        { age: '9 yrs and above', price: '₱150' }
+      ]
+    };
+
+    let chatMessages;
+    let chatInput;
+    let sendBtn;
+    let chatSuggestions;
+    let contentSection;
+    let cottagesSection;
+    let roomPreview;
+    let cottagePreview;
+    let minimizeBtn;
+    let chatContent;
+
+    const suggestedQuestions = [
+      'Check availability',
+      'How to book?',
+      'Check-in and check-out times',
+      'Entrance fee',
+      'Contact details',
+      'Address',
+      'Cancellation policy',
+      'Room rates'
+    ];
+
+    function addMessage(text, fromBot = true, allowHtml = false) {
+      const msg = document.createElement('div');
+      msg.classList.add('message', fromBot ? 'bot' : 'user');
+      if (allowHtml && fromBot) {
+        msg.innerHTML = text;
+      } else {
+        msg.textContent = text;
+      }
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showSuggestions() {
+      chatSuggestions.innerHTML = '<p class="suggestions-label">Suggested questions:</p>' + 
+        suggestedQuestions.map(q => `<button class="suggestion-btn">${q}</button>`).join('');
+      document.querySelectorAll('.suggestion-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          chatInput.value = btn.textContent;
+          sendChat();
+        });
+      });
+    }
+
+    function hideSuggestions() {
+      chatSuggestions.innerHTML = '';
+    }
+
+    function formatPrice(item) {
+      if (item.price == null || item.price === '') return '';
+      if (typeof item.price === 'number') {
+        return `₱${item.price} / night`;
+      }
+      if (typeof item.price === 'string' && item.price.trim().startsWith('₱')) {
+        return item.price.trim();
+      }
+      return `₱${item.price}`;
+    }
+
+    function formatPax(item) {
+      if (item.pax == null || item.pax === '') return '';
+      return `${item.pax} pax`;
+    }
+
+    function buildPreview(item, targetContainer, kind) {
+      const detailHtml = item.details ? item.details.map(detail => `
+            <p class="detail-title">${detail.name}</p>
+            <p>${detail.price}</p>
+            ${detail.pax ? `<p>${detail.pax}</p>` : ''}
+            <p>${detail.note}</p>
+          `).join('') : '';
+
+      targetContainer.innerHTML = `
+        <div class="preview-card">
+          <div class="preview-text">
+            <h2>${kind} details</h2>
+            <p class="room-tag">${item.name}</p>
+            ${item.details ? `
+              <div class="detail-block">
+                ${detailHtml}
+              </div>
+            ` : `
+              <p>${formatPrice(item)}${item.pax ? ` • ${formatPax(item)}` : ''} • ${item.ac ? 'Air-conditioned' : 'Ceiling fan'}</p>
+              <p>${item.description}</p>
+              <ul class="room-inclusions">
+                ${item.inclusions.map(detail => `<li>✓ ${detail}</li>`).join('')}
+              </ul>
+            `}
+            ${kind === 'Room' ? `<p class="room-visit">Check-in: ${resortData.checkIn} • Check-out: ${resortData.checkOut}</p>` : ''}
+            <div class="preview-buttons">
+              <button class="prev-btn" data-kind="${kind}">Previous</button>
+              <button class="next-btn" data-kind="${kind}">Next</button>
+            </div>
+          </div>
+          <div class="preview-image">
+            <img src="${item.image}" alt="${item.name}">
+          </div>
+        </div>
+      `;
+    }
+
+    function buildItemCards(items, targetId, previewTarget, kind) {
+      const target = document.getElementById(targetId);
+      target.innerHTML = items.map(item => {
+        const isCottage = Boolean(item.details);
+        return `
+          <article class="room-card">
+            <div class="card-image"><img src="${item.image}" alt="${item.name}"></div>
+            <div class="card-details">
+              <h3>${item.name}</h3>
+              <p>${formatPrice(item)}</p>
+              ${isCottage ? `${formatPax(item) ? `<p>${formatPax(item)}</p>` : ''}` : `<p>${formatPax(item)}${item.pax ? ' • ' : ''}${item.ac ? 'Air-conditioned' : 'Ceiling fan'}</p>`}
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      target.querySelectorAll('article').forEach((card, index) => {
+        card.addEventListener('click', () => {
+          const item = items[index];
+          const previewContainer = document.getElementById(previewTarget);
+          if (item && previewContainer) {
+            buildPreview(item, previewContainer, kind);
+            attachNextListener(items, previewTarget, kind);
+          }
+        });
+      });
+    }
+
+    function attachNextListener(items, previewTarget, kind) {
+      const previewContainer = document.getElementById(previewTarget);
+      if (!previewContainer) return;
+      const nextBtn = previewContainer.querySelector('button.next-btn');
+      const prevBtn = previewContainer.querySelector('button.prev-btn');
+
+      const navigateItem = (direction) => {
+        const currentName = previewContainer.querySelector('.room-tag')?.textContent || '';
+        const currentIndex = items.findIndex(item => item.name === currentName);
+        if (currentIndex === -1) return;
+
+        const nextIndex = direction === 'next'
+          ? (currentIndex + 1) % items.length
+          : (currentIndex - 1 + items.length) % items.length;
+
+        buildPreview(items[nextIndex], previewContainer, kind);
+        attachNextListener(items, previewTarget, kind);
+      };
+
+      if (nextBtn) {
+        nextBtn.onclick = () => navigateItem('next');
+      }
+      if (prevBtn) {
+        prevBtn.onclick = () => navigateItem('prev');
+      }
+    }
+
+    function getBotResponse(input) {
+      const normalized = input.trim().toLowerCase();
+      if (!normalized) return 'Please type something so I can assist you 😊';
+      if (/(availability|available|check.*room|vacancy)/i.test(input)) {
+        return `We have rooms listed now. Please specify: A-Frame, Amakan Room, or Bamboo A-Frame. Example: 'Check A-Frame availability for 2 nights starting May 10'.`;
+      }
+      if (/(book|reserve|reservation)/i.test(input)) {
+        return `To reserve, send room type, number of guests, and dates. Example: 'Reserve A-Frame for 6 pax on 2026-05-10 to 2026-05-12'. A 50% deposit holds booking.`;
+      }
+      if (/(check.*in|check.*out)/i.test(input)) {
+        return `Check-in is at ${resortData.checkIn}. Check-out is at ${resortData.checkOut}. Late checkout depends on availability.`;
+      }
+      if (/(cancel|cancellation|refund)/i.test(input)) {
+        return `Policy: no refund when reserving. You can move to another date once, subject to availability. Contact the resort at +63 917 0000 000 for manual changes.`;
+      }
+      if (/(policy|term|conditions)/i.test(input)) {
+        return `General policy: 12PM check-in, 10AM check-out, no refunds, reschedule allowed once. Pool access until 9PM, no corkage fee. For full policy, message 'policy details'.`;
+      }
+      if (/(entrance|entrance fee|admission|entry fee|gate fee)/i.test(input)) {
+        const fees = resortData.entranceFees.map(f => `${f.age}: ${f.price}`).join(', ');
+        return `Entrance fees are ${fees}. Children 0-2 yrs enter free, 3-8 yrs pay ₱80, and 9 yrs and above pay ₱150.`;
+      }
+      if (/(contact|reservation number|phone|mobile|fb|facebook|social)/i.test(input)) {
+        return `For reservations call ${resortData.contact.phone}. Find us on Facebook at <a href="${resortData.contact.facebookUrl}" target="_blank" rel="noreferrer">${resortData.contact.facebookName}</a>.`;
+      }
+      if (/(address|location|where)/i.test(input)) {
+        return `Our address is ${resortData.location}.`;
+      }
+      if (/(room rate|room price|room pricing)/i.test(input)) {
+        const list = resortData.rooms.map(r => `${r.name}: ₱${r.price} per night, ${r.pax} pax, ${r.ac ? 'AC' : 'Ceiling fan'}`).join('\n');
+        return `Room options:\n${list}`;
+      }
+      if (/(cottage|cottages|cottage rates)/i.test(input)) {
+        const list = resortData.cottages.flatMap(c => c.details
+          ? c.details.map(d => `${d.name}: ${d.price}${d.pax ? `, ${d.pax}` : ''}`)
+          : [`${c.name}: ${c.price}${c.pax ? `, ${c.pax} pax` : ''}`]
+        ).join('\n');
+        return `Cottage options:\n${list}`;
+      }
+      if (/help|hi|hello|hey/.test(normalized)) {
+        return `Hi! I’m the resort assistant. ${resortData.help}`;
+      }
+      showSuggestions();
+      return `I didn't quite catch that. Please try asking about availability, booking, check-in/out times, cancellation policy, entrance fee, contact, address, room rates, or cottage rates. You can also click the suggested questions below!`;
+    }
+
+    function sendChat(preserveInput = false) {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      addMessage(text, false);
+      if (!preserveInput) {
+        chatInput.value = '';
+      }
+      const typingIndicator = document.getElementById('typingIndicator');
+      typingIndicator.style.display = 'block';
+      setTimeout(() => {
+        typingIndicator.style.display = 'none';
+        const botResponse = getBotResponse(text);
+        const allowHtml = /<a\s/i.test(botResponse);
+        addMessage(botResponse, true, allowHtml);
+        showSuggestions();
+      }, 1000); // Increased delay for typing effect
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      chatMessages = document.getElementById('chatMessages');
+      chatInput = document.getElementById('chatInput');
+      sendBtn = document.getElementById('sendBtn');
+      chatSuggestions = document.getElementById('chatSuggestions');
+      contentSection = document.getElementById('content');
+      cottagesSection = document.getElementById('cottagesContent');
+      roomPreview = document.getElementById('roomPreview');
+      cottagePreview = document.getElementById('cottagePreview');
+      minimizeBtn = document.getElementById('minimizeBtn');
+      chatContent = document.getElementById('chatContent');
+
+      minimizeBtn.addEventListener('click', () => {
+        const isMinimized = chatContent.style.display === 'none';
+        chatContent.style.display = isMinimized ? 'block' : 'none';
+        minimizeBtn.textContent = isMinimized ? '−' : '+';
+      });
+
+      sendBtn.addEventListener('click', sendChat);
+      chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendChat(); });
+
+      buildItemCards(resortData.rooms, 'content', 'roomPreview', 'Room');
+      buildItemCards(resortData.cottages, 'cottagesContent', 'cottagePreview', 'Cottage');
+      buildPreview(resortData.rooms[0], roomPreview, 'Room');
+      attachNextListener(resortData.rooms, 'roomPreview', 'Room');
+      buildPreview(resortData.cottages[0], cottagePreview, 'Cottage');
+      attachNextListener(resortData.cottages, 'cottagePreview', 'Cottage');
+      addMessage(`Hello! Welcome to ${resortData.name}. I can help with reservations, FAQ, and policies. Type 'help' to start.`);
+      showSuggestions();
+      chatInput.focus();
+    });
+  </script>
+</body>
+</html>
