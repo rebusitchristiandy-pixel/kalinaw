@@ -53,8 +53,73 @@ body {
 .faq, .reservation { margin: 18px 0; padding: 18px; border: 1px solid #b78041; border-radius: 12px; background: rgba(255,255,255,.92); }
 .faq h3, .reservation h3 { margin-top: 0; }
 @media (max-width: 780px) {
+  body {
+    background-attachment: scroll;
+  }
+  .page-wrap {
+    max-width: 100%;
+    margin: 10px 10px 20px;
+    padding: 16px;
+  }
+  .hero {
+    padding: 18px;
+    border-radius: 16px;
+  }
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+  .hero p {
+    font-size: 0.95rem;
+  }
+  .site-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .site-nav a {
+    flex: 1 1 calc(50% - 10px);
+    text-align: center;
+    padding: 12px 10px;
+    font-size: 0.95rem;
+  }
   .preview-card { grid-template-columns: 1fr; }
   .content-cards { grid-template-columns: 1fr; }
+  .room-preview { padding: 18px; }
+  .preview-card img { min-height: 200px; }
+  .room-card { min-height: 240px; }
+  .card-details { padding: 14px; }
+  .faq, .reservation { padding: 16px; }
+  .chatbot {
+    width: calc(100vw - 16px);
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    max-height: calc(100vh - 16px);
+    border-radius: 18px;
+  }
+  .chatbot.mobile-open {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
+    border-radius: 18px;
+  }
+  .chat-header { padding: 14px; }
+  .chat-messages { padding: 14px; }
+  .chat-input-row { flex-wrap: wrap; gap: 8px; }
+  #chatInput { padding: 14px 14px; font-size: 1rem; border-radius: 12px; }
+  #sendBtn { width: 100%; padding: 14px; font-size: 1rem; border-radius: 12px; }
+  .chat-bottom { padding: 0 14px 14px; }
+  .suggestion-btn { padding: 14px 16px; font-size: 1rem; }
+  .minimize-btn { width: 34px; height: 34px; font-size: 1.3rem; }
+  .room-card::after { bottom: 10px; right: 10px; padding: 6px 10px; font-size: 0.82rem; }
+  .reservation-actions { flex-direction: column; }
+  .prev-btn, .next-btn, .suggestion-btn, .action-btn, #sendBtn, #chatInput {
+    touch-action: manipulation;
+  }
 }
 .chatbot { position: fixed; right: 20px; bottom: 20px; width: 320px; max-height: 420px; border-radius: 14px; box-shadow: 0 12px 30px rgba(0,0,0,.35); overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f7f5f1; z-index: 10; display: flex; flex-direction: column; }
 .chat-header { background: #93501b; color: #fff; padding: 10px; font-weight: 700; text-align: center; position: sticky; top: 0; z-index: 2; }
@@ -83,14 +148,6 @@ body {
 .action-btn:hover { background: #bc5c1c; transform: translateY(-1px); }
 .room-card { position: relative; }
 .room-card::after { content: 'Tap to view'; position: absolute; bottom: 12px; right: 12px; background: rgba(255,255,255,.92); color: #8b3c05; padding: 4px 8px; border-radius: 10px; font-size: 0.8rem; }
-@media (max-width: 780px) {
-  .chatbot { width: calc(100vw - 28px); right: 14px; bottom: 14px; max-height: 80vh; }
-  .chat-hint { margin: 10px 12px 0; }
-  .suggestion-btn { padding: 14px 16px; font-size: 1rem; }
-  #sendBtn { padding: 14px 18px; font-size: 1rem; }
-  .minimize-btn { width: 30px; height: 30px; font-size: 1.2rem; }
-  #chatInput { padding: 14px 12px; font-size: 1rem; }
-}
 .mobile-chat-btn {
   position: fixed;
   right: 20px;
