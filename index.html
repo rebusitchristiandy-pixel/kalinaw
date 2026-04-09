@@ -84,6 +84,8 @@
     </div>
   </div>
 
+  <div id="mobileChatBtn" class="mobile-chat-btn" style="display: none;">💬 Chat</div>
+
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script>
     $(function () {
@@ -245,6 +247,8 @@
     let cottagePreview;
     let minimizeBtn;
     let chatContent;
+    let mobileChatBtn;
+    let chatbot;
 
     const suggestedQuestions = [
       'Check availability',
@@ -465,13 +469,31 @@
       cottagesSection = document.getElementById('cottagesContent');
       roomPreview = document.getElementById('roomPreview');
       cottagePreview = document.getElementById('cottagePreview');
-      minimizeBtn = document.getElementById('minimizeBtn');
-      chatContent = document.getElementById('chatContent');
+      mobileChatBtn = document.getElementById('mobileChatBtn');
+      chatbot = document.getElementById('chatbot');
+
+      const isMobile = window.innerWidth <= 780;
+      if (isMobile) {
+        chatbot.style.display = 'none';
+        mobileChatBtn.style.display = 'flex';
+      }
 
       minimizeBtn.addEventListener('click', () => {
-        const isMinimized = chatContent.style.display === 'none';
-        chatContent.style.display = isMinimized ? 'block' : 'none';
-        minimizeBtn.textContent = isMinimized ? '−' : '+';
+        if (isMobile) {
+          chatbot.style.display = 'none';
+          mobileChatBtn.style.display = 'flex';
+        } else {
+          const isMinimized = chatContent.style.display === 'none';
+          chatContent.style.display = isMinimized ? 'block' : 'none';
+          minimizeBtn.textContent = isMinimized ? '−' : '+';
+        }
+      });
+
+      mobileChatBtn.addEventListener('click', () => {
+        chatbot.style.display = 'flex';
+        mobileChatBtn.style.display = 'none';
+        chatContent.style.display = 'flex';
+        minimizeBtn.textContent = '−';
       });
 
       sendBtn.addEventListener('click', sendChat);
