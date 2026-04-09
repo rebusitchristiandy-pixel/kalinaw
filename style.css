@@ -87,3 +87,24 @@ body {
   .chatbot { width: calc(100vw - 28px); right: 14px; bottom: 14px; max-height: 80vh; }
   .chat-hint { margin: 10px 12px 0; }
 }
+.mobile-chat-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #d16d20;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 11;
+  transition: transform 0.2s;
+}
+.mobile-chat-btn:hover {
+  transform: scale(1.1);
+}
