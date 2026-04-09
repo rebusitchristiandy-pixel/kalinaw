@@ -483,6 +483,7 @@
       minimizeBtn.addEventListener('click', () => {
         if (isMobile) {
           chatbot.style.display = 'none';
+          chatbot.classList.remove('mobile-open');
           mobileChatBtn.style.display = 'flex';
         } else {
           const isMinimized = chatContent.style.display === 'none';
@@ -493,6 +494,7 @@
 
       mobileChatBtn.addEventListener('click', () => {
         chatbot.style.display = 'flex';
+        chatbot.classList.add('mobile-open');
         mobileChatBtn.style.display = 'none';
         chatContent.style.display = 'flex';
         minimizeBtn.textContent = '−';
